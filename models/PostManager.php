@@ -26,21 +26,34 @@ function GetAllPostsFromUserId($userId)
   return $response->fetchAll();
 }
 
+// Remplacée par requête préparée pour sécuriser
 function SearchInPosts($search)
 {
   global $PDO;
-  $response = $PDO->query(
+  $response = $PDO->prepare(
     "SELECT post.*, user.nickname "
-. "FROM post LEFT JOIN user on (post.user_id = user.id) "
-. "WHERE content like '%$search%' "
-. "ORDER BY post.created_at DESC"
+      . "FROM post LEFT JOIN user on (post.user_id = user.id) "
+      . "WHERE content like :search "
+      . "ORDER BY post.created_at DESC"
+  );
+  $searchWithPercent = "%$search%";
+  $response->execute(
+    array(
+      "search" => $searchWithPercent
+    )
   );
   return $response->fetchAll();
 }
 
+// Remplacée par requête préparée pour sécuriser
 function CreateNewPost($userId, $msg)
 {
   global $PDO;
-  $response = $PDO->query("INSERT INTO post (user_id, content) values ​​($ userId, '$ msg')");
-  return $response->fetchAll();
+  $response = $PDO->prepare("INSERT INTO post(user_id, content) values (:userId, :msg)");
+  $response->execute(
+    array(
+      "userId" => $userId,
+      "msg" => $msg
+    )
+  );
 }
