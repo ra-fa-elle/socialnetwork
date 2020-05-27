@@ -66,7 +66,11 @@ switch ($action) {
 
 // Envoi d'un commentaire
   case 'newComment':
-    // code...
+    include "../models/CommentManager.php";
+    if (isset($_SESSION['userId']) && isset($_POST['postId']) && isset($_POST['comment'])) {
+    CreateNewComment($_SESSION['userId'], $_POST['postId'], $_POST['comment']);
+    }
+    header('Location: ?action=display');
     break;
 
     case 'display':

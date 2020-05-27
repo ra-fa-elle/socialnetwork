@@ -68,7 +68,7 @@
       </div>
     </div>
 
-    <!-- Tentative d'ajout formulaire de création de publi si user enregistré -->
+    <!-- Ajout formulaire de création de message si user enregistré -->
     <?php
     if (isset($_SESSION['userId'])) {
   ?>
@@ -83,7 +83,8 @@
 <?php
 }
 ?>
-<!-- Tentative End -->
+<!-- Form message End -->
+
 
     <div class="row">
       <div class="col">
@@ -107,6 +108,26 @@
                 <p><?= htmlspecialchars($onePost['content']); ?></p>
               </div>
               <div class="post-footer">
+                
+<!-- Ajout formulaire d'envoi de commentaires si user enregistré -->
+<?php
+if (isset($_SESSION['userId'])) {
+?>
+  <div class="input-group">
+    <form class="input-group" method="POST" action="?action=newComment">
+      <input name="postId" type="hidden" value="<?= $onePost['id'] ?>">
+      <input name="comment" class="form-control" placeholder="Add a comment" type="text">
+      <span class="input-group-text">
+        <a href="#" onclick="$(this).closest('form').submit()"><i class="fa fa-edit"></i></a>
+      </span>
+    </form>
+  </div>
+<?php
+}
+?>
+<!-- Form Comment End -->
+
+
                 <ul class="comments-list">
                   <?php
                   $postId = $onePost['id'];
