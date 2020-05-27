@@ -21,27 +21,28 @@ function GetAllUsers()
   return $response->fetchAll();
 }
 
-// Remplacée par equête préparée
+// Remplacée par equête préparée // puis exo 7, maj de la fonction pour prendre en compte le hachage mdp
 function GetUserIdFromUserAndPassword($username, $password)
 {
   global $PDO;
-  $preparedRequest = $PDO->prepare("SELECT * FROM user WHERE nickname=:nickname AND password=:password");
-  $preparedRequest->execute(
+  $response = $PDO->prepare("SELECT id FROM user WHERE nickname = :username AND password = MD5(:password) ");
+  $response->execute(
     array(
-      "nickname" => $username,
+      "username" => $username,
       "password" => $password
     )
   );
-  $users = $preparedRequest->fetchAll();
-  if (count($users) == 1) {
-    $user = $users[0];
-    return $user['id'];
+  if ($response->rowCount() == 1) {
+    $row = $response->fetch();
+    return $row['id'];
   } else {
     return -1;
   }
 }
 
-// Exo 6 : fonctions de SIGN UP
+
+// Exo 6 : fonctions d'enregistrement
+// si le pseudo est libre
 function IsNicknameFree($nickname)
 {
   global $PDO;
@@ -54,10 +55,11 @@ function IsNicknameFree($nickname)
   return $response->rowCount() == 0;
 }
 
+// création du nouvel utilisateur // Maj de la fonction a l'exo 7 pour prendre en compte le hachage mdp
 function CreateNewUser($nickname, $password)
 {
   global $PDO;
-  $response = $PDO->prepare("INSERT INTO user (nickname, password) values (:nickname , :password )");
+  $response = $PDO->prepare("INSERT INTO user (nickname, password) values (:nickname , MD5(:password) )");
   $response->execute(
     array(
       "nickname" => $nickname,

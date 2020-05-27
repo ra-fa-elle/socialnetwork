@@ -4,6 +4,7 @@ $action = $_GET["action"] ?? "display";
 
 switch ($action) {
 
+// Inscription
   case 'register':
     include "../models/UserManager.php";
     if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['passwordRetype'])) {
@@ -29,7 +30,7 @@ switch ($action) {
     }
   break;
 
-
+// Connexion
   case 'login':
     include "../models/UserManager.php";
       if (isset($_POST['username']) && isset($_POST['password'])) {
@@ -46,7 +47,7 @@ switch ($action) {
     }
     break;
 
-      
+// Déconnexion  
   case 'logout':
     if (isset($_SESSION['userId'])) {
       unset($_SESSION['userId']);
@@ -54,7 +55,7 @@ switch ($action) {
     header('Location: ?action=display');
     break;
   
-
+// Envoie d'un message
   case 'newMsg':
     include "../models/PostManager.php";
     if (isset($_SESSION['userId']) && isset($_POST['msg'])) {
@@ -63,6 +64,7 @@ switch ($action) {
     header('Location: ?action=display');
     break;
 
+// Envoi d'un commentaire
   case 'newComment':
     // code...
     break;
